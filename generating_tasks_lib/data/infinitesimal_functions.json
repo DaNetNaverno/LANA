@@ -1,0 +1,14 @@
+{
+  "infinitesimal_functions": [
+    "sin(x)",
+    "arcsin(x)",
+    "tg(x)",
+    "arctg(x)",
+    "1-cos(x)",
+    "ln(1+x)",
+    "log[a](1+x)",
+    "e^x-1",
+    "a^x-1",
+    "pow[1/a](1+x)-1"
+  ]
+}
