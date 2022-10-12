@@ -11,3 +11,15 @@
 Подробности можно найти в [ТЗ](https://vk.com/doc406828462_649201595?hash=vxHIHzlxB9sMqWpJzrXDGuT9h9CbGVzFCkB0a0DFwRD&dl=SmnL0zNQL1VZc3PkwaT8EbpxureIP29Nbdykbfas3j0)
 
 ___
+
+## Бесконечно малые функции
+
+Бесконечно малые функции реализованны с помощью класса `InfinitesimalFunction`:
+
+`set_function` - устанавливает значение бесконечно малой функции
+
+`set_random_function` - устанавливает значение бесконечно малой функции, случайно выбраной из переданного списка
+
+`compose` - создаёт композицию двух функций
+
+Список бесконечно малых функций находится в `/LANA/generating_tasks_lib/data/infinitesimal_functions.json`. Получить его можно с помощью функции `get_infinitesimal_functions`
