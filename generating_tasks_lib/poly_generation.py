@@ -1,93 +1,115 @@
 import random
 from fractions import Fraction
-from numpy import convolve
+from numpy import convolve, ndarray
 
 
 class PolynomGeneration:
     def __init__(self, degree: int, roots: list, rational_coefs: bool, multiplicity: int, canon_view: bool,
                  variable: str):
-        self.degree = degree  # макс. степень полинома
-        self.roots = roots  # введенные корни (вводить только с типом str!)
-        self.rational_coefs = rational_coefs  # наличие рациональных коэффициентов
-        self.multiplicity = multiplicity  # (x-a)^k отвечает за k
-        self.canon_view = canon_view  # канонический вид
-        self.variable = variable if variable == 'x' else '(' + variable + ')'  # переменная, по дефолту 'x'
+        self.__degree = degree  # макс. степень полинома
+        self.__roots = roots  # введенные корни (вводить только с типом str!)
+        self.__rational_coefs = rational_coefs  # наличие рациональных коэффициентов
+        self.__multiplicity = multiplicity  # (x-a)^k отвечает за k
+        self.__canon_view = canon_view  # канонический вид
+        self.__variable = variable if variable == 'x' else '(' + variable + ')'  # переменная, по дефолту 'x'
 
-    def full_random_generation(self):
-        polynom = []
-        for i in range(self.degree - len(self.roots) + 1):
-            if not self.rational_coefs:
+    def __full_random_generation(self) -> list:
+        polynom: list = []
+        for coef in range(self.__degree - len(self.__roots) + 1):
+            if not self.__rational_coefs:
                 polynom.append(random.randint(-20, 21))
             else:
                 polynom.append(Fraction(random.randint(-20, 21), random.randint(1, 10)))
         return polynom
 
-    def roots_generation(self):
-        polynom = []
-        for root in self.roots:
+    def __roots_generation(self) -> list:
+        polynom: list = []
+        for root in self.__roots:
             if '/' in root:
-                root = Fraction(root)
+                root: Fraction = Fraction(root)
             else:
-                root = int(root)
+                root: int = int(root)
             polynom.append([1, -1 * root])
         return polynom
 
-    def polynom_constructor(self):
-        polynom_roots = self.roots_generation()
-        polynom = self.full_random_generation()
-        if self.canon_view:
-            for i in polynom_roots:
-                polynom = convolve(polynom, i)
-            return self.latex(polynom, None)
+    def polynom_constructor(self) -> str:
+        polynom_roots: list = self.__roots_generation()
+        if self.__degree > len(self.__roots):
+            polynom = self.__full_random_generation()
+            if self.__canon_view:
+                for root in polynom_roots:
+                    polynom = convolve(polynom, root)
+                return self.__latex(polynom, None)
+            else:
+                return self.__latex(polynom, polynom_roots)
+        elif self.__degree == len(self.__roots):
+            if self.__canon_view:
+                polynom = [1]
+                for root in polynom_roots:
+                    polynom = convolve(root, polynom)
+                return self.__latex(polynom, None)
+            else:
+                return self.__latex(None, polynom_roots)
         else:
-            return self.latex(polynom, polynom_roots)
+            raise Exception("len(roots) > degree")
 
-    def latex(self, polynom_first, polynom_second):
-        latex_polynom = ''
+    def __latex(self, polynom_first, polynom_second) -> str:
+        latex_polynom: str = ''
         if polynom_second is not None:
-            for i in polynom_second:
-                if i != 0:
-                    numb = self.latex_coef_modifier(self.fractions_checker(i[1]))
-                    latex_polynom += '(%s%s)' % (self.variable, numb)
-            return '\\[' + latex_polynom + self.latex_canon(polynom_first) + '\\]'
+            for coef in polynom_second:
+                if coef != 0:
+                    numb = self.__latex_coef_modifier(coef[1])
+                    latex_polynom += '(%s%s)' % (self.__variable, numb)
+            if polynom_first is None:
+                return f'\\[{latex_polynom}\\]'
+            if self.__multiplicity > 1:
+                return f'\\[{latex_polynom}^{self.__multiplicity}{self.__latex_canon(polynom_first)}\\]'
+            else:
+                return f'\\[{latex_polynom}{self.__latex_canon(polynom_first)}\\]'
         else:
-            return '\\[' + self.latex_canon(polynom_first) + '\\]'
+            return f'\\[{self.__latex_canon(polynom_first)}\\]'
 
-    def latex_canon(self, polynom):
-        latex_string = ''
-        if self.canon_view:
-            degree_mem = self.degree
+    def __latex_canon(self, polynom: list) -> str:
+        latex_string: str = ''
+        if self.__canon_view:
+            degree_mem: int = self.__degree
         else:
-            degree_mem = self.degree - len(self.roots)
-        current_degree = degree_mem
-        for i in polynom:
-            coef = self.latex_coef_modifier(self.fractions_checker(i))
-            if i != 0:
-                if current_degree == degree_mem:
-                    coef = self.plus_minus_one(coef)
+            degree_mem: int = self.__degree - len(self.__roots)
+        current_degree: int = degree_mem
+        for coef_orig in polynom:
+            coef: str = self.__latex_coef_modifier(coef_orig)
+            if coef_orig != 0:
+                if current_degree == degree_mem and current_degree != 1:
+                    coef = self.__plus_minus_one(coef)
                     if coef != '+':
                         if coef.startswith('+'):
-                            latex_string += '%s%s^%d' % (coef[1::], self.variable, current_degree)
+                            latex_string += '%s%s^%d' % (coef[1::], self.__variable, current_degree)
                         else:
-                            latex_string += '%s%s^%d' % (coef, self.variable, current_degree)
+                            latex_string += '%s%s^%d' % (coef, self.__variable, current_degree)
                     else:
-                        latex_string += '%s^%d' % (self.variable, current_degree)
+                        latex_string += '%s^%d' % (self.__variable, current_degree)
                 elif current_degree > 1:
-                    coef = self.plus_minus_one(coef)
-                    latex_string += '%s%s^%d' % (coef, self.variable, current_degree)
+                    coef = self.__plus_minus_one(coef)
+                    latex_string += '%s%s^%d' % (coef, self.__variable, current_degree)
                 elif current_degree == 1:
-                    coef = self.plus_minus_one(coef)
-                    latex_string += '%s%s' % (coef, self.variable)
+                    coef = self.__plus_minus_one(coef)
+                    if degree_mem == 1:
+                        if coef.startswith('+'):
+                            coef = coef[1::]
+                    latex_string += '%s%s' % (coef, self.__variable)
                 elif current_degree == 0:
                     latex_string += '%s' % coef
             current_degree -= 1
-        if self.canon_view:
+        if self.__canon_view:
             return latex_string
         else:
-            return '(' + latex_string + ')'
+            return f'({latex_string})'
 
     @staticmethod
-    def latex_coef_modifier(numb):
+    def __latex_coef_modifier(numb) -> str:
+        if type(numb) == Fraction:
+            if numb.denominator == 1:
+                numb = numb.numerator
         if type(numb) == Fraction:
             if numb.numerator < 0:
                 return '-\\frac{%d}{%d}' % (numb.numerator * -1, numb.denominator)
@@ -97,14 +119,7 @@ class PolynomGeneration:
             return '{:+}'.format(numb)
 
     @staticmethod
-    def fractions_checker(fract):
-        if type(fract) == Fraction:
-            if fract.denominator == 1:
-                return fract.numerator
-        return fract
-
-    @staticmethod
-    def plus_minus_one(coef):
+    def __plus_minus_one(coef: str) -> str:
         if coef == '+1':
             return '+'
         elif coef == '-1':
@@ -112,5 +127,5 @@ class PolynomGeneration:
         return coef
 
 
-a = PolynomGeneration(5, ['1', '-2/3', '3/7'], True, 1, True, 'x')
-print(a.polynom_constructor())
+#a = PolynomGeneration(3, ['3/1', '1/3'], False, 1, True, 'x')
+#print(a.polynom_constructor())
