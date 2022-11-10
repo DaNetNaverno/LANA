@@ -1,7 +1,8 @@
 import random
-import poly_settings
 from fractions import Fraction
+
 from numpy import convolve
+from poly_settings import PolynomGenerationSettings
 
 
 class PolynomGeneration:
@@ -13,15 +14,19 @@ class PolynomGeneration:
         multiplicity: dict,
         canon_view: bool,
         variable: str,
+        settings: PolynomGenerationSettings,
     ):
         self._degree = degree  # макс. степень полинома
         self._roots = roots  # введенные корни (вводить только с типом str!)
         self._rational_coefs = rational_coefs  # наличие рациональных коэффициентов
-        self._multiplicity = multiplicity  # (x-a)^k отвечает за k {'корень'(str): степень(int)}
+        self._multiplicity = (
+            multiplicity  # (x-a)^k отвечает за k {'корень'(str): степень(int)}
+        )
         self._canon_view = canon_view  # канонический вид
         self._variable = (
             variable if variable == "x" else "(" + variable + ")"
         )  # переменная, по дефолту 'x'
+        self._settings = settings
 
     def _full_random_generation(self) -> list:
         while True:
@@ -29,18 +34,20 @@ class PolynomGeneration:
             for coef in range(self._degree - len(self._roots) + 1):
                 if not self._rational_coefs:
                     polynom.append(
-                        random.randint(poly_settings.int_lowest, poly_settings.int_highest)
+                        random.randint(
+                            self._settings.int_lowest, self._settings.int_highest
+                        )
                     )
                 else:
                     polynom.append(
                         Fraction(
                             random.randint(
-                                poly_settings.frac_lowest_num,
-                                poly_settings.frac_highest_num,
+                                self._settings.frac_lowest_num,
+                                self._settings.frac_highest_num,
                             ),
                             random.randint(
-                                poly_settings.frac_lowest_den,
-                                poly_settings.frac_highest_den,
+                                self._settings.frac_lowest_den,
+                                self._settings.frac_highest_den,
                             ),
                         )
                     )
