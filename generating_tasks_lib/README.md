@@ -23,3 +23,7 @@ ___
 `compose` - создаёт композицию двух функций
 
 Список бесконечно малых функций находится в `/LANA/generating_tasks_lib/data/infinitesimal_functions.json`. Получить его можно с помощью функции `get_infinitesimal_functions`
+
+## Задача1 Проверка на эквивалентность функций
+
+Метод `equival_latex` класса `EquivalenceLimits` возвращает задание с двумя эквивалентными функциями
