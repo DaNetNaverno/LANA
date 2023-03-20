@@ -1,0 +1,6 @@
+.footer {
+    background-color: var(--dark-blue);
+    padding: 15px 0;
+    color: #ffffff;
+    font-weight: 600;
+}

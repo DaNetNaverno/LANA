@@ -1,0 +1,13 @@
+.form-field {
+  font-weight: 600;
+  color: var(--disabled-blue);
+}
+
+.form__field {
+  margin-top: 20px;
+}
+
+/* .form__field:last-child {15
+  margin-top: 0;
+} */
+/*   //     */

@@ -1,0 +1,14 @@
+.input {
+    padding: 10px 16px;   
+    border: 2px solid #e1e3ec;
+    transition: .151s;
+    outline: 0;
+}
+
+.input:hover {
+    border-color: var(--light-blue);
+}
+
+.input:active, .input:focus {
+    border-color: var(--main-blue);
+}

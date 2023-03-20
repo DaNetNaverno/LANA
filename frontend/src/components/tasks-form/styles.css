@@ -1,0 +1,15 @@
+.generate-tasks {
+  padding: 15px 0;
+}
+
+.tasks-form__header {
+  display: flex;
+}
+
+.tasks-form__button {
+  margin-left: auto;
+}
+
+.task-form__content {
+  margin: 15px 0;
+}
