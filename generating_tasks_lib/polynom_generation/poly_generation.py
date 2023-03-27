@@ -3,7 +3,9 @@ from fractions import Fraction
 
 from numpy import convolve
 
-from generating_tasks_lib.polynom_generation.poly_settings import PolynomGenerationSettings
+from generating_tasks_lib.polynom_generation.poly_settings import (
+    PolynomGenerationSettings,
+)
 
 
 class PolynomGeneration:
@@ -160,7 +162,10 @@ class PolynomGeneration:
             else:
                 value_str: str = str(value)
 
-            if self._multiplicity.get(value_str) is not None and self._multiplicity[value_str] > 1:
+            if (
+                self._multiplicity.get(value_str) is not None
+                and self._multiplicity[value_str] > 1
+            ):
                 multip_dict[value] = (
                     multip_dict.get(value, 0) + self._multiplicity[value_str] - 1
                 )
@@ -175,7 +180,9 @@ class PolynomGeneration:
                 elif type(multi) == Fraction:
                     self._roots.append(f"{multi.numerator}/{multi.denominator}")
         if self._degree < len(polynom_roots):
-            raise Exception(f"degree error(degree < len(roots)): {self._degree} < {len(polynom_roots)}")
+            raise Exception(
+                f"degree error(degree < len(roots)): {self._degree} < {len(polynom_roots)}"
+            )
 
     @staticmethod
     def _latex_coef_modifier(numb) -> str:

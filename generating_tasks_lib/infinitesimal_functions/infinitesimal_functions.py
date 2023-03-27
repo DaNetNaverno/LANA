@@ -1,9 +1,11 @@
 from random import choice
 
-from generating_tasks_lib.infinitesimal_functions.settings import \
-    InfinitesimalFunctionsSettings
-from generating_tasks_lib.infinitesimal_functions.utils import \
-    get_infinitesimal_functions
+from generating_tasks_lib.infinitesimal_functions.settings import (
+    InfinitesimalFunctionsSettings,
+)
+from generating_tasks_lib.infinitesimal_functions.utils import (
+    get_infinitesimal_functions,
+)
 
 
 class InfinitesimalFunction:

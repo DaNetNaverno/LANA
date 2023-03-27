@@ -3,9 +3,13 @@ from random import randint
 import pytest
 
 from generating_tasks_lib.infinitesimal_functions import (
-    InfinitesimalFunction, InfinitesimalFunctionsSettings)
-from generating_tasks_lib.polynom_generation import (PolynomGeneration,
-                                                     PolynomGenerationSettings)
+    InfinitesimalFunction,
+    InfinitesimalFunctionsSettings,
+)
+from generating_tasks_lib.polynom_generation import (
+    PolynomGeneration,
+    PolynomGenerationSettings,
+)
 
 
 @pytest.fixture()
