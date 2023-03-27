@@ -1,5 +1,4 @@
 from enum import Enum
-from random import randint
 
 from generating_tasks_lib.data.latex_variant_template import latex_variant_template
 from generating_tasks_lib.tasks import generate_sum_task

@@ -42,6 +42,16 @@ class InfinitesimalFunction:
             )
         self.set_function(choice(infinitesimal_functions))
 
+    def set_param(self, param: int | str) -> None:
+        """
+        Устанавливает значение параметра a для бесконечно малой функции, если он есть
+        :param param: значение параметра a
+        :return:
+        """
+        self._infinitesimal_function = self._infinitesimal_function.replace(
+            "<param>", f"{param}"
+        )
+
     def compose(self, compose_function: str) -> None:
         """
         Создаёт композицию двух функций
@@ -59,8 +69,8 @@ class InfinitesimalFunction:
         :return: функция в формате tex
         """
         return (
-            self._infinitesimal_function.replace("(", "{")
-            .replace(")", "}")
+            self._infinitesimal_function.replace("<(>", "{")
+            .replace("<)>", "}")
             .replace("/#", "_{")
             .replace("#/", "}")
         )
