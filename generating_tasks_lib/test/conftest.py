@@ -8,14 +8,21 @@ from generating_tasks_lib.polynom_generation import (PolynomGeneration,
                                                      PolynomGenerationSettings)
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture()
 def infinitesimal_function() -> InfinitesimalFunction:
     inf_f = InfinitesimalFunction(InfinitesimalFunctionsSettings())
-    inf_f.set_random_function()
     return inf_f
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture()
+def random_infinitesimal_function(
+    infinitesimal_function: InfinitesimalFunction,
+) -> InfinitesimalFunction:
+    infinitesimal_function.set_random_function()
+    return infinitesimal_function
+
+
+@pytest.fixture()
 def limit() -> str:
     return str(randint(-100, 100))
 

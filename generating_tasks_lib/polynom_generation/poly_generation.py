@@ -2,7 +2,8 @@ import random
 from fractions import Fraction
 
 from numpy import convolve
-from poly_settings import PolynomGenerationSettings
+
+from generating_tasks_lib.polynom_generation import PolynomGenerationSettings
 
 
 class PolynomGeneration:
@@ -74,18 +75,15 @@ class PolynomGeneration:
                 for root in polynom_roots:
                     polynom = convolve(polynom, root)
                 return self._latex(polynom, None)
-            else:
-                return self._latex(polynom, polynom_roots)
+            return self._latex(polynom, polynom_roots)
         elif self._degree == len(self._roots):
             if self._canon_view:
                 polynom = [1]
                 for root in polynom_roots:
                     polynom = convolve(root, polynom)
                 return self._latex(polynom, None)
-            else:
-                return self._latex(None, polynom_roots)
-        else:
-            raise Exception("len(roots) > degree")
+            return self._latex(None, polynom_roots)
+        raise Exception(f"len(roots) > degree: {len(polynom_roots)} > {self._degree}")
 
     def _latex(self, polynom_first, polynom_second) -> str:
         latex_polynom: str = ""
@@ -105,10 +103,8 @@ class PolynomGeneration:
                         exceptions.append(coef)
             if polynom_first is None:
                 return f"\\[{latex_polynom}\\]"
-            else:
-                return f"\\[{latex_polynom}{self._latex_canon(polynom_first)}\\]"
-        else:
-            return f"\\[{self._latex_canon(polynom_first)}\\]"
+            return f"\\[{latex_polynom}{self._latex_canon(polynom_first)}\\]"
+        return f"\\[{self._latex_canon(polynom_first)}\\]"
 
     def _latex_canon(self, polynom: list) -> str:
         latex_string: str = ""
@@ -163,13 +159,11 @@ class PolynomGeneration:
                 value_str: str = f"{value.numerator}/{value.denominator}"
             else:
                 value_str: str = str(value)
-            try:
-                if self._multiplicity[value_str] > 1:
-                    multip_dict[value] = (
-                        multip_dict.get(value, 0) + self._multiplicity[value_str] - 1
-                    )
-            except KeyError:
-                continue
+
+            if self._multiplicity.get(value_str) is not None and self._multiplicity[value_str] > 1:
+                multip_dict[value] = (
+                    multip_dict.get(value, 0) + self._multiplicity[value_str] - 1
+                )
         polynom_roots.clear()
         self._roots.clear()
         self._multiplicity = multip_dict
@@ -181,20 +175,17 @@ class PolynomGeneration:
                 elif type(multi) == Fraction:
                     self._roots.append(f"{multi.numerator}/{multi.denominator}")
         if self._degree < len(polynom_roots):
-            raise Exception("degree error( degree < len(roots) )")
+            raise Exception(f"degree error(degree < len(roots)): {self._degree} < {len(polynom_roots)}")
 
     @staticmethod
     def _latex_coef_modifier(numb) -> str:
         if type(numb) == Fraction:
             if numb.denominator == 1:
                 numb = numb.numerator
-        if type(numb) == Fraction:
             if numb.numerator < 0:
                 return "-\\frac{%d}{%d}" % (numb.numerator * -1, numb.denominator)
-            else:
-                return "+\\frac{%d}{%d}" % (numb.numerator, numb.denominator)
-        else:
-            return "{:+}".format(numb)
+            return "+\\frac{%d}{%d}" % (numb.numerator, numb.denominator)
+        return "{:+}".format(numb)
 
     @staticmethod
     def _plus_minus_one(coef: str) -> str:

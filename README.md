@@ -35,3 +35,26 @@ ___
 Важно!!! В CI есть проверка линтеров! Если она не пройдёт, не получится смёржить код!
 
 ___
+
+## Про запуск и импорты?
+
+Проще всего запускать проект в Pycharm. Это делается как обычно, просто запустите нужный вам файл или тест.
+
+При запуски из косоли ОБЯЗАТЕЛЬНО сначало перейти в корневую папку, затем использовать команду
+
+`python -m <file_path>`
+
+или, если надо запустить тест
+
+`python -m pytest <test_file_path>`
+
+Надо делать ИМЕННО ТАК, чтобы нормально работали импорты!!!
+
+При этом импорты должны быть абсолютными относительно корневой папки проекта. 
+
+Пример как надо: `from generating_tasks_lib.polynom_generation.poly_settings import PolynomGenerationSettings`
+
+А ТАК НЕ НАДО: `from poly_settings import PolynomGenerationSettings`
+
+Пример взят из файла `generating_tasks_lib/polynom_generation/poly_generation.py`
+___
