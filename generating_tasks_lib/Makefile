@@ -1,6 +1,7 @@
 #!make
 PROJECT = generating_tasks_lib
 DOCKER_BUILD_CLI = "docker run --rm ${PROJECT}:build"
+TEST_DIR = generating_tasks_lib/test
 
 ifeq ($(OS),Windows_NT)
 	python = python
@@ -53,7 +54,7 @@ format: format-black format-isort
 
 # Testing
 test:
-	@echo "No test(" && exit 0
-	
+	@$(python) -m pytest ${TEST_DIR}
+
 docker-test:
 	@"${DOCKER_BUILD_CLI}" make test

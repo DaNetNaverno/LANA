@@ -3,7 +3,7 @@ from fractions import Fraction
 
 from numpy import convolve
 
-from generating_tasks_lib.polynom_generation import PolynomGenerationSettings
+from generating_tasks_lib.polynom_generation.poly_settings import PolynomGenerationSettings
 
 
 class PolynomGeneration:
