@@ -34,5 +34,5 @@ def limit() -> str:
 @pytest.fixture()
 def polynom(limit: str) -> PolynomGeneration:
     return PolynomGeneration(
-        5, [limit, "-2/3", "3/7"], False, {}, False, "x", PolynomGenerationSettings()
+        degree=5, rational_coefs=False, multiplicity={limit: 1, "-2/3": 1, "3/7": 1}, canon_view=False, settings=PolynomGenerationSettings()
     )

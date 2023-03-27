@@ -12,15 +12,13 @@ class PolynomGeneration:
     def __init__(
         self,
         degree: int,
-        roots: list,
-        rational_coefs: bool,
-        multiplicity: dict,
-        canon_view: bool,
-        variable: str,
+        multiplicity: dict[str, int],
         settings: PolynomGenerationSettings,
+        canon_view: bool = True,
+        rational_coefs: bool = False,
+        variable: str = 'x',
     ):
         self._degree = degree  # макс. степень полинома
-        self._roots = roots  # введенные корни (вводить только с типом str!)
         self._rational_coefs = rational_coefs  # наличие рациональных коэффициентов
         self._multiplicity = (
             multiplicity  # (x-a)^k отвечает за k {'корень'(str): степень(int)}
@@ -30,6 +28,18 @@ class PolynomGeneration:
             variable if variable == "x" else "(" + variable + ")"
         )  # переменная, по дефолту 'x'
         self._settings = settings
+        self._roots = self._set_roots()  # введенные корни
+
+    def _set_roots(self) -> list[str]:
+        """
+        Переводит multiplicity в список корней.
+        :return: список корней
+        """
+        roots: list[str] = []
+        for root, degree in self._multiplicity.items():
+            for _ in range(degree):
+                roots.append(root)
+        return roots
 
     def _full_random_generation(self) -> list:
         while True:
